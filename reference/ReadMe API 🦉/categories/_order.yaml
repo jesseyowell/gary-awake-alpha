@@ -1,0 +1,6 @@
+- getcategories
+- createcategory
+- getcategory
+- updatecategory
+- deletecategory
+- getcategorydocs
