@@ -16,7 +16,3 @@ metadata:
 |                      | cheetos yum |
 
 I'm updating this via Git! Wowwww
-
-<br />
-
-test
