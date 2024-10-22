@@ -26,3 +26,5 @@ metadata:
 |                      | pelicans    |
 |                      | cats        |
 |                      | cheetos yum |
+
+\<! -- can't see me -->
