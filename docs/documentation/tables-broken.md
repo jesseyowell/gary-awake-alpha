@@ -28,3 +28,10 @@ metadata:
 |                      | cheetos yum |
 
 \<! -- can't see me -->
+
+<br />
+
+| fun      | studff |    |
+| :------- | :----- | :- |
+| item one |        |    |
+|          |        |    |
