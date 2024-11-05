@@ -1,7 +1,7 @@
 ---
 title: Page of fun
 deprecated: false
-hidden: false
+hidden: true
 metadata:
   robots: index
 ---
