@@ -19,7 +19,7 @@ metadata:
 
 ## **Deploying TruU with JAMF Pro**
 
-**Step 1:** Sign into your Jamf Pro account [https://{domain}.](https://truunfr.jamfcloud.com/)[jamfcloud.com](//jamfcloud.com)
+**Step 1:** Sign into your Jamf Pro account [https://{user.domain}.](https://truunfr.jamfcloud.com/)[jamfcloud.com](//jamfcloud.com)
 
 **Step 2:** Go to "Settings", then navigate to the "Automated device enrollment" to create a new MDM server integration
 
