@@ -1,0 +1,1165 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0",
+    "title": "Live Data People API",
+    "description": "This API provides information about people as observed by Live Data",
+    "termsOfService": "https://www.livedatatechnologies.com/terms-of-service",
+    "contact": {
+      "name": "Live Data Technologies",
+      "url": "https://www.livedatatechnologies.com",
+      "email": "support@livedatatechnologies.com"
+    },
+    "license": {
+      "url": "https://creativecommons.org/licenses/by-nd/4.0",
+      "name": "Attribution-NoDerivs"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://gotlivedata.io/api/people/v1",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/{org_id}/verify": {
+      "post": {
+        "tags": [
+          "Verification"
+        ],
+        "summary": "Verify record",
+        "description": "Takes an array of queries and responds with a corresponding array of results. The response array will always be the same size as the request array and the elements will be in the same order as the request. For each item in the input array:\n\nGiven a unique person ID (in the form of a LinkedIn URL) and a Company (either name or linkedin URL), validates whether this person still works at the given company. \n\nSince only a company name string is provided and there can be variations of company names, this endpoint implements unique logic to determine if the company is the same and does not guarantee the provided name matches exactly.\n\nThe `ldt_status` return field is an enumerated field with the values:\n* `same_co` - the person is at the same company as the provided input company\n* `new_co` - the person is at a different company than the one provided\n* `no_current_company` - the person is currently not associated with a company\n* `not_found` - the person was not found in the Live Data system\n\nIn all cases, the `current_position` object provides the latest information from the Live Data system.",
+        "operationId": "verify",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "description": "Your Org ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "description": "An array of items to look for. Supports up to 500 at a time.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "linkedin": {
+                      "type": "string",
+                      "description": "The LinkedIn URL of the person to check. Can be either the full URL or the \"slug\" (last URL element)."
+                    },
+                    "company_name": {
+                      "type": "string",
+                      "description": "The name of a company to compare against. Must be provided if company_linkedin is not provided."
+                    },
+                    "company_linkedin": {
+                      "type": "string",
+                      "description": "The linkedin URL or slug of a company to compare against. Must be provided if company_name is not provided."
+                    }
+                  },
+                  "required": [
+                    "linkedin"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "description": "The results of each element in the array.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ldt_status": {
+                        "type": "string",
+                        "enum": [
+                          "new_co",
+                          "same_co",
+                          "no_current_company",
+                          "not_found"
+                        ],
+                        "description": "If 'true', indicates the given person still works at the provided company.\r\n\r\nIf 'false', indicates the given person does not work at the provided company."
+                      },
+                      "current_position": {
+                        "type": "object",
+                        "description": "If ldt_status is same_co or new_co, this provides the latest information as observed by Live Data.",
+                        "properties": {
+                          "company_name": {
+                            "type": "string",
+                            "description": "The name of the company that matches the provided input if still active, or the active company if not."
+                          },
+                          "company_linkedin": {
+                            "type": "string",
+                            "description": "If known, the linkedin URL of the company that matches the provided input if still active, or the active company if not."
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "The current title at the returned `company_name`."
+                          }
+                        }
+                      },
+                      "location": {
+                        "type": "string",
+                        "description": "The location of the person, if known."
+                      }
+                    },
+                    "required": [
+                      "ldt_status"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "http://localhost:3000"
+          }
+        ]
+      }
+    },
+    "/{org_id}/search": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Search for person data",
+        "description": "Search for people in Live Data that match the specified filters. ",
+        "operationId": "search-persons-data",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "description": "Your Org ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PersonSearchBody"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "people": {
+                      "type": "array",
+                      "description": "An array of all the matching people based on the provided filters and size.",
+                      "items": {
+                        "$ref": "#/components/schemas/Person"
+                      }
+                    },
+                    "pagination_token": {
+                      "type": "string",
+                      "description": "If provided, make the exact same call with this added parameter to get the next page of results based on your existing filters and size. \r\n\r\nIf not provided, no additional contacts match the given criteria."
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://gotlivedata.io/api/people/v1",
+            "description": "Production"
+          }
+        ]
+      }
+    },
+    "/{org_id}/search/download": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Download person data",
+        "description": "Download people as a CSV based on specified search criteria. This call returns a CSV file -- for JSON using the same filters, see `POST .../search`.\n\nNested object names are exported using dot-notation, e.g. `position.company.name`.\n\nThis endpoint will always download all records that match the provided criteria. Large results may take some time to download.\n\nPlease note that including many past jobs and related fields will result in a lot of columns in the CSV, so consider limiting the results returned using the `past_jobs` and `return_fields` parameters.\n",
+        "operationId": "download-persons-data",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "description": "Your Org ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/PersonSearchBody"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://gotlivedata.io/api/people/v1",
+            "description": "Production"
+          }
+        ]
+      }
+    },
+    "/{org_id}/find": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Find people",
+        "description": "Find people in Live Data that match the given criteria. For people finding, the following fields are supported: `name`, `title`, `linkedin`, `company.name`, `company.linkedin`, `email_address`, `company.ticker`, `company.domain`, `education.school`. The `matches` array has a max size of 100. For each item in the match array, the response will contain all people that match the provided fields with a `score` of how well the person matches the input fields, with a maximum 5 hits per match. For queries where the number of results is expected to be higher than 5, try the `/search` endpoint.",
+        "operationId": "find",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "description": "Your Org ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "matches": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "fields": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "field_name": {
+                                "type": "string"
+                              },
+                              "search_term": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "size": {
+                    "type": "integer",
+                    "maximum": 5
+                  },
+                  "return_fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "confidence": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "matches": [
+                      {
+                        "fields": [
+                          {
+                            "field_name": "email_address",
+                            "search_term": "joe@google.com"
+                          }
+                        ]
+                      },
+                      {
+                        "fields": [
+                          {
+                            "field_name": "email_address",
+                            "search_term": "joe@amazon.com"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "matches": {
+                      "type": "array",
+                      "description": "An array of responses. Each position in the array corresponds to the position in the input array.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "people": {
+                            "type": "array",
+                            "description": "The people that matched the provided filters. Maximum of 5 returned in this endpoint (use `/search` for larger queries).",
+                            "items": {
+                              "allOf": [
+                                {
+                                  "$ref": "#/components/schemas/Person"
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "score": {
+                                      "type": "number",
+                                      "description": "A score of how well each person matched the input criteria."
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "found": {
+                            "type": "boolean",
+                            "description": "Indicates whether there was at least one hit given the provided inputs."
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Example 1": {
+                    "value": {
+                      "matches": [
+                        {
+                          "people": [
+                            {
+                              "id": "string",
+                              "created_at": "string",
+                              "info_change_detected_at": "string",
+                              "title_change_detected_at": "string",
+                              "company_change_detected_at": "string",
+                              "position": {
+                                "title": "string",
+                                "level": "C-Team",
+                                "function": "Banking and Wealth Management",
+                                "started_at": "string",
+                                "started_at_year_only": true,
+                                "ended_at": "string",
+                                "ended_at_year_only": true,
+                                "location": "string",
+                                "email": "string",
+                                "email_status": "valid",
+                                "direct_dial_number": "string",
+                                "company": {
+                                  "id": "string",
+                                  "name": "string",
+                                  "location": "string",
+                                  "linkedin": "string",
+                                  "ticker": "string",
+                                  "type": "Privately Held",
+                                  "address": "string",
+                                  "country": "string",
+                                  "domain": "string",
+                                  "employee_count": 0,
+                                  "industry": "string",
+                                  "sic_codes": [
+                                    "string"
+                                  ]
+                                }
+                              },
+                              "jobs": {
+                                "title": "string",
+                                "level": "C-Team",
+                                "function": "Banking and Wealth Management",
+                                "started_at": "string",
+                                "started_at_year_only": true,
+                                "ended_at": "string",
+                                "ended_at_year_only": true,
+                                "location": "string",
+                                "email": "string",
+                                "email_status": "valid",
+                                "direct_dial_number": "string",
+                                "company": {
+                                  "id": "string",
+                                  "name": "string",
+                                  "location": "string",
+                                  "linkedin": "string",
+                                  "ticker": "string",
+                                  "type": "Privately Held",
+                                  "address": "string",
+                                  "country": "string",
+                                  "domain": "string",
+                                  "employee_count": 0,
+                                  "industry": "string",
+                                  "sic_codes": [
+                                    "string"
+                                  ]
+                                }
+                              },
+                              "education": [
+                                {
+                                  "school": "string",
+                                  "field": "string",
+                                  "degree": "string",
+                                  "started_at": "string",
+                                  "ended_at": "string"
+                                }
+                              ],
+                              "first_name": "string",
+                              "last_name": "string",
+                              "name": "string",
+                              "linkedin": "string",
+                              "country": "string",
+                              "connections": "string",
+                              "location": "string",
+                              "cell_phone_number": "string",
+                              "score": 0
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://gotlivedata.io/api/people/v1",
+            "description": "Production"
+          }
+        ]
+      }
+    },
+    "/{org_id}/person/{ldp}": {
+      "get": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Get person",
+        "description": "Get person by LDP id. Use the `fields` parameter to specify which fields to return.",
+        "operationId": "get-person-by-ldp",
+        "parameters": [
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "Comma separated fields to return. Use any field in the Person schema, using dot-notation for nested fields.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ldp",
+            "in": "path",
+            "description": "The LDP id of the person to get",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "org_id",
+            "in": "path",
+            "description": "Your org ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "person": {
+                      "$ref": "#/components/schemas/Person"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid format for person id provided"
+          },
+          "404": {
+            "description": "Person not found"
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://gotlivedata.io/api/people/v1",
+            "description": "Production"
+          }
+        ]
+      }
+    },
+    "/{org_id}/persons/lookup_by_ids": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Lookup people by IDs",
+        "description": "Get a batch of people by Live Data IDs, max 50K per request.",
+        "operationId": "lookup-persons-by-ids",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "description": "The list of LDP ids to get",
+                    "minItems": 1,
+                    "maxItems": 50000,
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "fields": {
+                    "type": "array",
+                    "description": "The list of person fields to return in the response. Nested dict fields are separated by dot notation, e.g. `position.company.name`.",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "ids"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "people": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Person"
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "AccessToken": []
+          }
+        ],
+        "servers": [
+          {
+            "url": "https://gotlivedata.io/api/people/v1",
+            "description": "Production"
+          }
+        ]
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Search"
+    },
+    {
+      "name": "Verification"
+    }
+  ],
+  "components": {
+    "requestBodies": {
+      "PersonSearchBody": {
+        "description": "",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "filters": {
+                  "type": "array",
+                  "description": "List of filters to apply to the search",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/FilterGroup"
+                      },
+                      {
+                        "$ref": "#/components/schemas/PersonSearchFilter"
+                      }
+                    ]
+                  }
+                },
+                "return_fields": {
+                  "type": "array",
+                  "description": "List of field names to return. For nested JSON fields, use dot notation (i.e. jobs.company.name)",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "past_jobs": {
+                  "type": "integer",
+                  "description": "How many previous jobs to include in the data"
+                },
+                "size": {
+                  "type": "integer",
+                  "description": "The number of records to return in each page of the search. Defaults to 10. "
+                },
+                "pagination_token": {
+                  "type": "string",
+                  "description": "If provided, returns the next page of data based on the `pagination_token`. \r\n\r\nThe `pagination_token` is only valid for a given set of filters/size -- the same `filters` and `size` must be supplied for every call using the `pagination_token` from a response with those filters. If the filters/size don't match the pagination_token, this call will return a `400`."
+                },
+                "sort_by": {
+                  "type": "string",
+                  "description": "Which field to sort on. Use the pattern +name to sort ascending and -name to sort descending."
+                },
+                "extra_aggs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "AccessToken": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Person": {
+        "type": "object",
+        "title": "Person",
+        "description": "Represents a Person as observed by Live Data.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique Live Data ID for this person"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Date the person was added to Live Data"
+          },
+          "info_change_detected_at": {
+            "type": "string",
+            "description": "Most recent date that any field changed."
+          },
+          "title_change_detected_at": {
+            "type": "string",
+            "description": "Most recent date that Live Data detected a title change."
+          },
+          "company_change_detected_at": {
+            "type": "string",
+            "description": "Most recent date that Live Data detected a company change."
+          },
+          "position": {
+            "$ref": "#/components/schemas/Job"
+          },
+          "jobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Job"
+            }
+          },
+          "education": {
+            "type": "array",
+            "description": "Array of the education history for this person",
+            "items": {
+              "type": "object",
+              "properties": {
+                "school": {
+                  "type": "string",
+                  "description": "Name of the school"
+                },
+                "field": {
+                  "type": "string",
+                  "description": "Name of the field of study"
+                },
+                "degree": {
+                  "type": "string",
+                  "description": "Name of the degree the person achieved"
+                },
+                "started_at": {
+                  "type": "string",
+                  "description": "Started at date. Will always be the 1st day of a month at 00:00"
+                },
+                "ended_at": {
+                  "type": "string",
+                  "description": "Ended at date. Will always be the 1st day of a month at 00:00"
+                }
+              }
+            }
+          },
+          "first_name": {
+            "type": "string",
+            "description": "First name, if known"
+          },
+          "last_name": {
+            "type": "string",
+            "description": "Last name, if known"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the person"
+          },
+          "linkedin": {
+            "type": "string",
+            "description": "The linkedin ID for this person"
+          },
+          "country": {
+            "type": "string",
+            "description": "Name of the country this person lives in"
+          },
+          "connections": {
+            "type": "integer",
+            "description": "Number of connections on LinkedIn"
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of this person"
+          },
+          "cell_phone_number": {
+            "type": "string",
+            "description": "Person’s cell phone number"
+          },
+          "location_details": {
+            "$ref": "#/components/schemas/LocationDetails"
+          }
+        }
+      },
+      "Job": {
+        "type": "object",
+        "title": "Job",
+        "description": "Represents a job, which is a combination of Company+Title",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the person at this job"
+          },
+          "level": {
+            "type": "string",
+            "enum": [
+              "C-Team",
+              "VP",
+              "Director",
+              "Manager",
+              "Staff",
+              "Consultant"
+            ],
+            "description": "Level derived from title using internal ML process"
+          },
+          "function": {
+            "type": "string",
+            "enum": [
+              "Banking and Wealth Management",
+              "Business Management",
+              "Consulting",
+              "Education",
+              "Engineering",
+              "Finance and Administration",
+              "Healthcare",
+              "Human Resources",
+              "Information Technology",
+              "Legal",
+              "Marketing and Product",
+              "Operations",
+              "Program and Project Management",
+              "Publishing, Editorial and Reporting",
+              "Quality",
+              "Real Estate",
+              "Risk, Safety, Compliance",
+              "Sales and Support"
+            ],
+            "description": "Function derived from title using internal ML process"
+          },
+          "started_at": {
+            "type": "string",
+            "description": "Date the person started this job. Will always be the 1st day of a month at 00:00"
+          },
+          "started_at_year_only": {
+            "type": "boolean",
+            "description": "Indicates if the started_at date should be parsed as a year only. In these cases, the date will always be Jan 1."
+          },
+          "ended_at": {
+            "type": "string",
+            "description": "Date this job ended. Will always be the 1st day of a month at 00:00"
+          },
+          "ended_at_year_only": {
+            "type": "boolean",
+            "description": "Indicates if the ended_at date should be parsed as a year only. In these cases, the date will always be Jan 1."
+          },
+          "location": {
+            "type": "string",
+            "description": "Location of this job"
+          },
+          "email": {
+            "type": "string",
+            "description": "Person’s email address at this job"
+          },
+          "email_status": {
+            "type": "string",
+            "enum": [
+              "valid",
+              "catch-all",
+              "best-guess"
+            ],
+            "description": "Status of their email at this job"
+          },
+          "direct_dial_number": {
+            "type": "string",
+            "description": "Person’s phone number at this job"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "location_details": {
+            "$ref": "#/components/schemas/LocationDetails"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "The duration of this particular job, in months"
+          },
+          "company_tenure": {
+            "type": "integer",
+            "description": "The tenure of the person at this company, across contiguous jobs, in months"
+          },
+          "is_first_at_company": {
+            "type": "boolean",
+            "description": "Boolean value to indicate whether this is the person’s first job at this company"
+          },
+          "is_last_at_company": {
+            "type": "boolean",
+            "description": "Boolean value to indicate whether this is the person’s last job at this company. Note this will be `true` for active jobs."
+          }
+        }
+      },
+      "Company": {
+        "type": "object",
+        "title": "Company",
+        "description": "Dict of company-specific information related to the job",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique Live Data ID for this company"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the company"
+          },
+          "location": {
+            "type": "string",
+            "description": "Primary general locality of the business"
+          },
+          "linkedin": {
+            "type": "string",
+            "description": "LinkedIn slug for the company"
+          },
+          "ticker": {
+            "type": "string",
+            "description": "Public stock ticker for the company, if applicable"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Privately Held",
+              "Self Owned",
+              "Non Profit",
+              "Public Company",
+              "Partnership",
+              "Self Employed",
+              "Educational",
+              "Government Agency"
+            ],
+            "description": "Company type (public, private, govt, non-profit, etc)"
+          },
+          "address": {
+            "type": "string",
+            "description": "Primary street address"
+          },
+          "country": {
+            "type": "string",
+            "description": "Primary country for this company"
+          },
+          "domain": {
+            "type": "string",
+            "description": "Primary domain for the company"
+          },
+          "employee_count": {
+            "type": "number",
+            "description": "Total employee count"
+          },
+          "industry": {
+            "type": "string",
+            "description": "Primary industry"
+          },
+          "sic_codes": {
+            "type": "array",
+            "description": "SIC codes",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "LocationDetails": {
+        "type": "object",
+        "title": "LocationDetails",
+        "properties": {
+          "country": {
+            "type": "string",
+            "description": "The normalized country name for this location"
+          },
+          "country_code": {
+            "type": "string",
+            "description": "The two-letter ISO country code for this location"
+          },
+          "region": {
+            "type": "string",
+            "description": "The normalized region name for this location. For US locations, this is the State"
+          },
+          "region_abbreviation": {
+            "type": "string",
+            "description": "The standard abbreviation for the normalized region "
+          },
+          "locality": {
+            "type": "string",
+            "description": "The normalized locality name for this location. For US locations, this is the City"
+          },
+          "county": {
+            "type": "string",
+            "description": "For US locations, the county name for this location"
+          },
+          "postal_code": {
+            "type": "string",
+            "description": "The central/primary postal code associated with this location. For US locations, this is the 5-digit zip code"
+          },
+          "msa": {
+            "type": "string",
+            "description": "For US locations, the standard MSA name that this location belongs to, if any"
+          },
+          "lat": {
+            "type": "string",
+            "description": "The latitude for this location, generalized"
+          },
+          "lon": {
+            "type": "string",
+            "description": "The longitude for this location, generalized"
+          },
+          "fips_code": {
+            "type": "string",
+            "description": "The FIPS code for this location"
+          },
+          "raw": {
+            "type": "string",
+            "description": "The input location value from which the other values were derived"
+          }
+        }
+      },
+      "FilterGroup": {
+        "type": "object",
+        "title": "FilterGroup",
+        "description": "Provides a group of filters that are either `and`ed or `or`ed together.",
+        "properties": {
+          "operator": {
+            "type": "string",
+            "enum": [
+              "and",
+              "or"
+            ]
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/PersonSearchFilter"
+                },
+                {
+                  "$ref": "#/components/schemas/FilterGroup"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "PersonSearchFilter": {
+        "title": "PersonSearchFilter",
+        "description": "A filter to apply when searching people. You can add a filter for any field of a person and, depending on the data type of the field, the value to filter on. Strings, dates, numbers, and booleans each have their own specific fields that must be used for filtering. You can also specify whether the match should be an exact match, a \"fuzzy\" match, or an \"exists\" match using the `match_type` field. \n\nUse dot-notation to specify fields that are in nested dicts.\n\nTo search for multiple criteria within a given job (i.e. \"an engineer at Amazon\"), use a FilterGroup to group the criteria with an `AND` operator. Note that when using this approach the FilterGroup must contain **only** `jobs.` filters within it.\n\nFilters are combined using the `AND` operator. ",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SearchFilter"
+          }
+        ],
+        "x-examples": {
+          "Example 1": {
+            "type": "must",
+            "field": "string",
+            "string_values": [
+              "string"
+            ],
+            "date_from": "2019-08-24T14:15:22Z",
+            "date_to": "2019-08-24T14:15:22Z",
+            "number_min": 0,
+            "number_max": 0,
+            "boolean_value": true,
+            "match_type": "fuzzy"
+          }
+        }
+      },
+      "SearchFilter": {
+        "type": "object",
+        "title": "SearchFilter",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "must",
+              "must_not"
+            ],
+            "description": "Either 'must' or 'must_not'"
+          },
+          "field": {
+            "type": "string",
+            "description": "The name of the field in OS"
+          },
+          "string_values": {
+            "type": "array",
+            "description": "If the field is a text field, an array of values that must/must-not match",
+            "items": {
+              "type": "string"
+            }
+          },
+          "date_from": {
+            "type": "string",
+            "description": "If the field is a date field, this is the \"from\" date to use"
+          },
+          "date_to": {
+            "type": "string",
+            "description": "If the field is a date field, this is the \"to\" date to use"
+          },
+          "number_min": {
+            "type": "number",
+            "description": "If the field is a number field, the min number tha t must match"
+          },
+          "number_max": {
+            "type": "number",
+            "description": "If the field is a number field, the max number tha t must match"
+          },
+          "boolean_value": {
+            "type": "boolean",
+            "description": "If the field is a boolean, this value will be used for the filter"
+          },
+          "match_type": {
+            "type": "string",
+            "enum": [
+              "fuzzy",
+              "exact",
+              "exists"
+            ],
+            "description": "Specifies what kind of match to do on the field: \n* `fuzzy` - match the value in a fuzzy manner\n* `exact` - match the value exactly\n* `exists` - only query the existence of the field, not a value match\n\n`fuzzy` and `exact` only apply to string fields, not dates, numbers, or bools",
+            "default": "fuzzy"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "AccessToken": []
+    }
+  ]
+}
