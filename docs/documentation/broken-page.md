@@ -5,13 +5,13 @@ hidden: false
 metadata:
   robots: index
 ---
-<Embed url="https://www.youtube.com/watch?v=tak6xo-ls_s" title="Creating and Updating a Static Secret" favicon="https://www.google.com/favicon.ico" image="https://i.ytimg.com/vi/tak6xo-ls_s/hqdefault.jpg" provider="youtube.com" href="https://www.youtube.com/watch?v=tak6xo-ls_s" typeOfEmbed="youtube" html="%3Ciframe%20class%3D%22embedly-embed%22%20src%3D%22%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Fsrc%3Dhttps%253A%252F%252Fwww.youtube.com%252Fembed%252Ftak6xo-ls_s%253Ffeature%253Doembed%26display_name%3DYouTube%26url%3Dhttps%253A%252F%252Fwww.youtube.com%252Fwatch%253Fv%253Dtak6xo-ls_s%26image%3Dhttps%253A%252F%252Fi.ytimg.com%252Fvi%252Ftak6xo-ls_s%252Fhqdefault.jpg%26key%3D7788cb384c9f4d5dbbdbeffd9fe4b92f%26type%3Dtext%252Fhtml%26schema%3Dyoutube%22%20width%3D%22854%22%20height%3D%22480%22%20scrolling%3D%22no%22%20title%3D%22YouTube%20embed%22%20frameborder%3D%220%22%20allow%3D%22autoplay%3B%20fullscreen%3B%20encrypted-media%3B%20picture-in-picture%3B%22%20allowfullscreen%3D%22true%22%3E%3C%2Fiframe%3E" />
+<Embed url="https://www.youtube.com/watch?v=tak6xo-ls_s" href="https://www.youtube.com/watch?v=tak6xo-ls_s" typeOfEmbed="youtube" html="%3Ciframe%20class%3D%22embedly-embed%22%20src%3D%22%2F%2Fcdn.embedly.com%2Fwidgets%2Fmedia.html%3Fsrc%3Dhttps%253A%252F%252Fwww.youtube.com%252Fembed%252Ftak6xo-ls_s%253Ffeature%253Doembed%26display_name%3DYouTube%26url%3Dhttps%253A%252F%252Fwww.youtube.com%252Fwatch%253Fv%253Dtak6xo-ls_s%26image%3Dhttps%253A%252F%252Fi.ytimg.com%252Fvi%252Ftak6xo-ls_s%252Fhqdefault.jpg%26key%3D7788cb384c9f4d5dbbdbeffd9fe4b92f%26type%3Dtext%252Fhtml%26schema%3Dyoutube%22%20width%3D%22854%22%20height%3D%22480%22%20scrolling%3D%22no%22%20title%3D%22YouTube%20embed%22%20frameborder%3D%220%22%20allow%3D%22autoplay%3B%20fullscreen%3B%20encrypted-media%3B%20picture-in-picture%3B%22%20allowfullscreen%3D%22true%22%3E%3C%2Fiframe%3E" />
 
 > 📘 Deeper Dive
 >
 > For more in-depth information, check out our detailed documentation on the following topics:
->
-> 
+> <a href="https://docs.akeyless.io/docs/static-secrets" target="_blank">Static Secrets</a>
+
 
 > 👍 Need any help?
 >
@@ -87,7 +87,7 @@ The secret will be created in the directory you chose, as seen in the image belo
 
 ## Fetching a Static Secret via the CLI
 
-To fetch a secret, run the below command in your terminal, replacing \[folder\_name], \[secret\_name], and \[secret\_value]. 
+To fetch a secret, run the below command in your terminal, replacing \[folder\_name], \[secret\_name], and \[secret\_value].
 
 ```
 akeyless get-secret-value -n /[folder_name]/[secret_name]
