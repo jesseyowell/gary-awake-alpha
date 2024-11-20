@@ -11,7 +11,7 @@ You're on your way to building an awesome developer hub! Here's some of the thin
 
 This is an important change to the documentation.
 
-* [ ] Beans
+* [x] Beans
 * [ ] Cheese
 * [ ] Lettuce
 * [x] Sour Cream
