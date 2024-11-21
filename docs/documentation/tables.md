@@ -19,8 +19,6 @@ I'm updating this via Git! Wowwww
 
 <br />
 
-<br />
-
 ```mermaid
 flowchart LR 
  A --- B[fa:fa-spinner B] 
