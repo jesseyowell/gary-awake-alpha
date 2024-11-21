@@ -16,3 +16,14 @@ metadata:
 |                      | cheetos yum |
 
 I'm updating this via Git! Wowwww
+
+<br />
+
+<br />
+
+```mermaid
+flowchart LR 
+ A --- B[fa:fa-spinner B] 
+ B --> C[fa:fa-check C] 
+ B --> D[fa:fa-ban D]
+```
