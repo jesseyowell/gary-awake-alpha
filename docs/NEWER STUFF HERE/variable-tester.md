@@ -7,4 +7,4 @@ metadata:
 ---
 ## Variable
 
-hello { __proto__.typedef }
+hello { __proto__.class }
