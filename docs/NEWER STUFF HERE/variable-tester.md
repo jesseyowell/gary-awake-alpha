@@ -7,4 +7,4 @@ metadata:
 ---
 ## Variable
 
-hello { __proto__.name }
+hello { __proto__.type }
