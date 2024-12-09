@@ -10,4 +10,4 @@ metadata:
 hello
 
 * Let's go to [https://www.google.com](https://www.google.com)
-* Let's go to \[[https://apple.com\](](https://apple.com]\()[https://apple.com](https://apple.com)
+* Let's go to ugh
