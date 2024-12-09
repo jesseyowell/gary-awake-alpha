@@ -9,9 +9,5 @@ metadata:
 
 hello {user.name}
 
-<br />
-
-\{ function getGreeting(user.name) \{ &#x20;
-&#x20; if (user) \{
-&#x20;   return \<h1>Hello, \{formatName(user)}!\</h1>;  }
-&#x20; return \<h1>Hello, Stranger.\</h1>;} }
+* Let's go to [https://www.google.com](https://www.google.com)
+* Let's go to [https://cheese.com](https://cheese.com)
