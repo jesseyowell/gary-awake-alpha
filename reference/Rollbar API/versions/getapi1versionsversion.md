@@ -5,7 +5,7 @@ excerpt: |
 
   https://docs.rollbar.com/docs/versions
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get_api-1-versions-version
 hidden: false
 ---

@@ -5,7 +5,7 @@ excerpt: >
   UUIDs are part of the response in
   https://docs.rollbar.com/reference/create-item.
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get-an-item-by-occurrence-uuid
 hidden: false
 ---

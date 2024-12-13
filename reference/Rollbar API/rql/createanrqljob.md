@@ -17,7 +17,7 @@ excerpt: |
     }
   }```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: create-an-rql-job
 hidden: false
 ---

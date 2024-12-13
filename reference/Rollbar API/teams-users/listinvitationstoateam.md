@@ -26,7 +26,7 @@ excerpt: >
 
   ```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: list-invitations-to-a-team
 hidden: false
 ---

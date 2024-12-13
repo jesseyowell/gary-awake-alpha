@@ -14,7 +14,7 @@ excerpt: >
   `https://rollbar.com/Rollbar/demo/items/54/occurrences/3209095494/`
   (`3209095494` is the Occurrence ID).
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get_api-1-instance-instance-id
 hidden: false
 ---

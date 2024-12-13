@@ -10,7 +10,7 @@ excerpt: >
   read and write access, but not to all settings. `view` gives the team
   read-only access.
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: create-a-team
 hidden: false
 ---

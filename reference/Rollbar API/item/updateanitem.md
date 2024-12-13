@@ -22,7 +22,7 @@ excerpt: >
     --data '{"status": "resolved", "resolved_in_version": "aabbcc1"}'
     ```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: update-an-item
 hidden: false
 ---

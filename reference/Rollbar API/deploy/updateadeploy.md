@@ -6,7 +6,7 @@ excerpt: |
       console.log(data);
   });```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: update-a-deploy
 hidden: false
 ---

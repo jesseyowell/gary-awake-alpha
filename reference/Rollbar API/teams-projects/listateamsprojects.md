@@ -18,7 +18,7 @@ excerpt: |
   }
   ```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: list-a-teams-projects
 hidden: false
 ---

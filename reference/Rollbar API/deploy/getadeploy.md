@@ -5,7 +5,7 @@ excerpt: >
   as the id field in other API calls, and can be found in the Rollbar UI on URLs
   like `https://rollbar.com/deploy/12345/` (`12345` is the Deploy ID).
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get-a-deploy
 hidden: false
 ---

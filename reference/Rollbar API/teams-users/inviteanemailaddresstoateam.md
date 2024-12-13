@@ -29,7 +29,7 @@ excerpt: >
 
   ```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: invite-an-email-address-to-a-team
 hidden: false
 ---

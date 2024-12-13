@@ -5,7 +5,7 @@ excerpt: >
   _look_ like a file, because of this, all dSYM bundles must be zipped prior to
   upload.
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: upload-a-dsym-file
 hidden: false
 ---

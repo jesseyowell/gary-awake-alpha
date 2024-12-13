@@ -8,7 +8,7 @@ excerpt: >
 
   endpoint instead. To add new rules, use the `POST` endpoint.
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: put_api-1-notifications-webhook-rules
 hidden: false
 ---

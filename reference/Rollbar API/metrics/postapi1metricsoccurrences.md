@@ -97,7 +97,7 @@ excerpt: >
 
   * `request_body`
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: post_api-1-metrics-occurrences
 hidden: false
 ---

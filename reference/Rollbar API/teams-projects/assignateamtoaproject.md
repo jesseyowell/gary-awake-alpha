@@ -12,7 +12,7 @@ excerpt: |
   }
   ```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: assign-a-team-to-a-project
 hidden: false
 ---

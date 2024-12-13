@@ -19,7 +19,7 @@ excerpt: >
 
   ```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: upload-a-js-source-map
 hidden: false
 ---

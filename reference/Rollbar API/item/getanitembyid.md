@@ -9,7 +9,7 @@ excerpt: >
   `https://rollbar.com/myaccount/myproject/items/456/` – that is the "counter",
   which can be used in the following API call.
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get-an-item-by-id
 hidden: false
 ---

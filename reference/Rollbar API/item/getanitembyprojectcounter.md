@@ -27,7 +27,7 @@ excerpt: >
 
   ```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get-an-item-by-project-counter
 hidden: false
 ---

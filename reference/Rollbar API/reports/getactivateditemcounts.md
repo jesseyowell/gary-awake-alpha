@@ -42,7 +42,7 @@ excerpt: >
     ]
   }```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get-activated-item-counts
 hidden: false
 ---

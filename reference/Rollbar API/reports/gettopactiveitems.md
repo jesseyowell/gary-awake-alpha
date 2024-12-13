@@ -45,7 +45,7 @@ excerpt: >
   please see the [Framework
   IDs](https://docs.rollbar.com/docs/rql#framework-ids) section in our docs.
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get-top-active-items
 hidden: false
 ---

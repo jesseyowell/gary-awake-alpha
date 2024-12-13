@@ -14,7 +14,7 @@ excerpt: |
   }
   ```
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: get-person-deletion-status
 hidden: false
 ---

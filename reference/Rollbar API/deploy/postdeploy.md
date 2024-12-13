@@ -8,7 +8,7 @@ excerpt: >
   For instructions on setting the default deploy timeout period, see [Deploy
   Timeouts](https://docs.rollbar.com/docs/deploy-tracking#section-deploy-timeout).
 api:
-  file: rollbar-api-new.json
+  file: Usersjyowelloasrollbar-api-new.json
   operationId: post-deploy
 hidden: false
 ---
