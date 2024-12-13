@@ -1,0 +1,9 @@
+- listateamsusers
+- checkifauserisassignedtoateam
+- assignausertoteam
+- removeauserfromateam
+- listausersteams
+- listinvitationstoateam
+- inviteanemailaddresstoateam
+- getinvitation
+- cancelinvitation
