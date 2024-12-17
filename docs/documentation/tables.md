@@ -29,7 +29,56 @@ flowchart LR
 
 These are JSX powered tables:
 
-| One     | Two    | Three  |
-| :------ | :----- | :----- |
-| Cheese  | Nachos | Pizzas |
-| Friends | Fun    | Magic  |
+<Table align={["left","left","left"]}>
+  <thead>
+    <tr>
+      <th style={{ textAlign: "left" }}>
+        One
+      </th>
+
+      <th style={{ textAlign: "left" }}>
+        Two
+      </th>
+
+      <th style={{ textAlign: "left" }}>
+        Three
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        Cheese
+
+        * 1
+        * 2
+        * 3
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        Nachos
+
+        <Glossary>parliament</Glossary>
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        Pizzas
+      </td>
+    </tr>
+
+    <tr>
+      <td style={{ textAlign: "left" }}>
+        Friends
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        Fun
+      </td>
+
+      <td style={{ textAlign: "left" }}>
+        Magic
+      </td>
+    </tr>
+  </tbody>
+</Table>
