@@ -1,5 +1,6 @@
 ---
 title: Tables
+excerpt: This is an example of tables
 deprecated: false
 hidden: false
 metadata:
@@ -25,3 +26,10 @@ flowchart LR
  B --> C[fa:fa-check C] 
  B --> D[fa:fa-ban D]
 ```
+
+These are JSX powered tables:
+
+| One     | Two    | Three  |
+| :------ | :----- | :----- |
+| Cheese  | Nachos | Pizzas |
+| Friends | Fun    | Magic  |
