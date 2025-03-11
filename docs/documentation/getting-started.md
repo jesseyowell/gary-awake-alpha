@@ -15,6 +15,7 @@ This is an important change to the documentation.
 * [ ] Cheese
 * [ ] Lettuce
 * [x] Sour Cream
+* [ ] Salsa
 
 # 📝 Customize your docs
 
